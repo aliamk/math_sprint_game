@@ -40,6 +40,40 @@ let finalTimeDisplay = '0.0s'
 // Scroll
 let valueY = 0 // this figure will change 80px everytime a user clicks on the Wrong or Right buttons
 
+// Reset Game
+function playAgain() {
+  gamePage.addEventListener('click', startTimer)
+  scorePage.hidden = true
+  splashPage.hidden = false
+  equationsArray = []
+  playerGuessArray = []
+  valueY = 0
+  playAgainBtn.hidden = true
+}
+
+// Show Score Page
+function showScorePage() {
+  // Show play again button after 1sec
+  setTimeout(() => {
+    playAgainBtn.hidden = false
+  }, 1000)
+  gamePage.hidden = true
+  scorePage.hidden = false
+}
+
+// Format and display time in the DOM
+function scoresToDom() {
+  finalTimeDisplay = finalTime.toFixed(1)
+  baseTime = timePlayed.toFixed(1)
+  penaltyTime = penaltyTime.toFixed(1)
+  baseTimeEl.textContent = `Base Time: ${baseTime}s`
+  penaltyTimeEl.textContent = `Penalty: +${penaltyTime}s`
+  finalTimeEl.textContent = `${finalTimeDisplay}s`
+  // Scroll back to the top of the item container
+  itemContainer.scrollTo({ top: 0, behavior: 'instant'})
+  showScorePage()
+}
+
 // Stop timer, process results and navigate to Score Page
 function checkTime() {
   console.log(timePlayed)
@@ -56,7 +90,8 @@ function checkTime() {
       }
     })
     finalTime = timePlayed + penaltyTime
-    console.log('time', timePlayed, 'penalty:', penaltyTime, 'final:', finalTime)
+    // console.log('time', timePlayed, 'penalty:', penaltyTime, 'final:', finalTime)
+    scoresToDom()
   }
 }
 
