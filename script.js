@@ -83,7 +83,27 @@ function createEquations() {
 //   itemContainer.appendChild(bottomSpacer)
 // }
 
-// Get eh value from selected radio button
+function countdownStart() {
+  countdown.textContent = '3'
+  setTimeout(() => {
+    countdown.textContent = '2'
+  }, 1000)
+  setTimeout(() => {
+    countdown.textContent = '1'
+  }, 2000)
+  setTimeout(() => {
+    countdown.textContent = 'GO!'
+  }, 3000)
+}
+
+// To navigate from Splash Page to Countdown Page
+function showCountdown() {
+  countdownPage.hidden = false
+  splashPage.hidden = true
+  countdownStart()
+}
+
+// When User selects a game - get the game value from the selected radio button
 function getRadioValue() {
   let radioValue
   radioInputs.forEach((radioInput) => {
@@ -91,23 +111,26 @@ function getRadioValue() {
       radioValue = radioInput.value
     }
   })
-  return radioValue // Has to be outside of the loop else it will never send the value to selectQuestionAmount
+  return radioValue // Has to be outside of the loop, else it will never send the value to selectQuestionAmount
 }
 
-// Form that decides amount of questions
+// Function logging the value of the input form from the game selection that the user has made (getRadioValue)
 function selectQuestionAmount(e) {
   e.preventDefault()
   questionAmount = getRadioValue()
   console.log('question amount: ', questionAmount)
+  if (questionAmount) {  // If questionAmount is true/has a value/not undefined...
+    showCountdown() // ...call the showCountdown function (if questionAmount is undefined, don't continue to call showCountdown)
+  }
 }
 
-// Event Listener for the startForm:  add the function within the event listener
+// Event Listener for the startForm - turns clicked items blue or non-white
 startForm.addEventListener('click', () => {
-  radioContainers.forEach((radioEl) => {
+  radioContainers.forEach((radioEl) => {  // for every radioContainer clicked...
     // Remove Selected Label Styling
-    radioEl.classList.remove('selected-label')
+    radioEl.classList.remove('selected-label') // remove the class that turns it blue
     // Add it back if radio input is checked
-    if (radioEl.children[1].checked) {
+    if (radioEl.children[1].checked) { // if the item is checked, add the blue label
       radioEl.classList.add('selected-label')
     }
   })
