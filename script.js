@@ -250,25 +250,27 @@ function populateGamePage() {
 
 // Display 3, 2, 1, GO!
 function countdownStart() {
-  countdown.textContent = '3'
-  setTimeout(() => {
-    countdown.textContent = '2'
+  let count = 3
+  countdown.textContent = count
+  const timeCountDown = setInterval(() => {
+    count--
+    if (count === 0) {
+      countdown.textContent = 'GO!'
+    } else if (count === -1) {
+      showGamePage()
+      clearInterval(timeCountDown)
+    } else {
+      countdown.textContent = count
+    }
   }, 1000)
-  setTimeout(() => {
-    countdown.textContent = '1'
-  }, 2000)
-  setTimeout(() => {
-    countdown.textContent = 'GO!'
-  }, 3000)
 }
 
 // To navigate from Splash Page to Countdown Page
 function showCountdown() {
   countdownPage.hidden = false
   splashPage.hidden = true
-  countdownStart()
   populateGamePage() 
-  setTimeout(showGamePage, 4000)
+  countdownStart()
 }
 
 // When User selects a game - get the game value from the selected radio button
