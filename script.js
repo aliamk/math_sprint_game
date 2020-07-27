@@ -30,15 +30,56 @@ let equationObject = {}
 const wrongFormat = []
 
 // Time
+let timer //represents the time interval between start and stop
+let timePlayed = 0 // increments every 10sec
+let baseTime = 0 // start time - start time
+let penaltyTime = 0 // based on wrong answers
+let finalTime = 0 
+let finalTimeDisplay = '0.0s'
 
 // Scroll
 let valueY = 0 // this figure will change 80px everytime a user clicks on the Wrong or Right buttons
 
-// Scroll and store the user selection in playGuessArray
+// Stop timer, process results and navigate to Score Page
+function checkTime() {
+  console.log(timePlayed)
+  if (playerGuessArray.length == questionAmount) {
+    console.log('player guess array:', playerGuessArray)
+    clearInterval(timer)
+    // Check for wrong guesses and add penalty time
+    equationsArray.forEach((equation, index) => {
+      if (equation.evaluated === playerGuessArray[index]) {
+        // Correct guess, no penalty
+      } else {
+        // Incorrect guess, add penalty
+        penaltyTime += 0.5
+      }
+    })
+    finalTime = timePlayed + penaltyTime
+    console.log('time', timePlayed, 'penalty:', penaltyTime, 'final:', finalTime)
+  }
+}
+
+// Add 10th of a second to timePlayed
+function addTime() {
+  timePlayed += 0.1
+  checkTime()
+}
+
+// Start time when game page is clicked
+function startTimer() {
+  // Reset times
+  timePlayed = 0
+  penaltyTime = 0
+  finalTime = 0
+  timer = setInterval(addTime, 100) // call 0.1s every 100ms
+  gamePage.removeEventListener('click', startTimer) // To stop startTimer from triggering more than once
+}
+
+// Scroll and store the user selection in playerGuessArray
 function select(guessedTrue) {
-  console.log('player guess array:', playerGuessArray)
-  // Scroll 80px
-  valueY += 80
+  // console.log('player guess array:', playerGuessArray)
+  valueY += 80    // Scroll 80px
   itemContainer.scroll(0, valueY)
   // Add player guess to array
   return guessedTrue ? playerGuessArray.push('true') : playerGuessArray.push('false')
@@ -114,7 +155,7 @@ function populateGamePage() {
   topSpacer.classList.add('height-240')
   // Selected Item
   const selectedItem = document.createElement('div')
-  selectedItem.classList.add('selected-item')
+  selectedItem.classList.add('selected-item') // a blue div that old answered questions will scroll into everytime user clicks a button
   // Append
   itemContainer.append(topSpacer, selectedItem)
 
@@ -185,3 +226,4 @@ startForm.addEventListener('click', () => {
 
 // Event Listener - listen for the Start Round button's submit
 startForm.addEventListener('submit', selectQuestionAmount)
+gamePage.addEventListener('click', startTimer)
