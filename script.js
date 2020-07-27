@@ -21,6 +21,7 @@ const playAgainBtn = document.querySelector('.play-again')
 // Equations
 let questionAmount = 0
 let equationsArray = []
+let playerGuessArray = []
 
 // Game Page
 let firstNumber = 0
@@ -31,6 +32,17 @@ const wrongFormat = []
 // Time
 
 // Scroll
+let valueY = 0 // this figure will change 80px everytime a user clicks on the Wrong or Right buttons
+
+// Scroll and store the user selection in playGuessArray
+function select(guessedTrue) {
+  console.log('player guess array:', playerGuessArray)
+  // Scroll 80px
+  valueY += 80
+  itemContainer.scroll(0, valueY)
+  // Add player guess to array
+  return guessedTrue ? playerGuessArray.push('true') : playerGuessArray.push('false')
+}
 
 // Displays Game Page
 function showGamePage() {
